@@ -4,6 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    # each type of user is allowed to his own sections
+    users_admin: '%env(resolve:USERS_ADMIN)%'
+    users_manager: '%env(resolve:USERS_MANAGER)%'
+    users_it: '%env(resolve:USERS_IT)%'
+    users_cfo: '%env(resolve:USERS_CFO)%'
 
 services:
     # default configuration for services in *this* file
@@ -25,3 +30,16 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+    # config/services.yaml - LDAP
+    Symfony\Component\Ldap\Ldap:
+        arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
+    Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
+        arguments:
+            -   host: '%env(resolve:LDAP_SERVER)%'
+                port: '%env(resolve:LDAP_SERVER_PORT)%'
+                # encryption: tls
+                options:
+                    protocol_version: '%env(resolve:LDAP_VERSION)%'
+                    referrals: false

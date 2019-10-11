@@ -1,0 +1,77 @@
+{% extends 'basehome.html.twig' %}
+
+{% block title %}Worksorder - Showall{% endblock %}
+
+{% block javascripts %}
+  <script>
+    // initialization and configuration
+    $(document).ready( function () {
+        $('#listShowallTable').dataTable( {
+              "fixedHeader": true,
+              "lengthMenu": [ 1000, 100, 75, 50, 25, 10 ]
+              //"info":     false, // remove header and footer
+              //"ordering": false,
+              //"bPaginate": false,
+              //"sDom": 'T<"clear">lfrtip'
+        } ); // end dataTable
+    } ); // end ready function
+    // END initialization and configuration
+  </script>
+{% endblock %}
+
+
+{% block body %}
+
+<table id="listShowallTable">
+  <thead>
+    <tr>
+      <td></td>
+      <td>ActivityCode</td>
+      <td>Description</td>
+      <td>Workorder</td>
+      <td>Responsible</td>
+      <td>Deputy</td>
+      <td>Valid From</td>
+      <td>Valid To</td>
+      {% if userBelongsTo(users_admin, username) %}
+      <td></td>
+      <td>Id</td>
+      <td>Create Date</td>
+      <td>Last Change Author</td>
+      <td>Last Change Date</td>
+      <td>Internal Note</td>
+      {% endif %}
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for ar in list %}
+    <tr>
+      <td>        
+        <a href="{{ path('editUser', { 'id': ar.id }) }}">
+          <img src="{{ asset('images/icon-edit.svg') }}" alt="edit" height="24" style="float:left"></img>
+        </a>
+      </td>
+      <td> {{ ar.activityCodePrefix }}-{{ ar.activityCodeSuffix }} </td>
+      <td> {{ ar.description }} </td>
+      <td> {{ ar.workorder }} </td>
+      <td> {{ ar.responsible }} </td>
+      <td> {{ ar.deputy }} </td>
+      <td> {{ ar.validFrom|date('d/m/Y') }} </td>
+      <td> {{ ar.validTo|date('d/m/Y') }} </td>
+      {% if userBelongsTo(users_admin, username) %}
+      <td>
+        <a href="{{ path('editUser', { 'id': ar.id }) }}">
+          <img src="{{ asset('images/icon-delete.svg') }}" alt="del" height="24" style="float:left"></img>
+      </td>
+      <td> {{ ar.id }} </td>
+      <td> {{ ar.lastChangeAuthor }} </td>
+      <td> {{ ar.lastChangeDate|date('Ymd-Hise') }} </td>
+      <td> {{ ar.internalNote }} </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

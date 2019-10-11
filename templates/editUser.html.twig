@@ -1,0 +1,38 @@
+{% extends 'basehome.html.twig' %}
+
+{% block title %}New Workorder Page{% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+{# {{ form_widget(form) }} #}
+<table style="border-collapse: collapse;">
+  <tr>
+    <td>AC</td>
+    <td>AC</td>
+    <td>Description</td>
+    <td>Workorder</td>
+    <td>Deputy</td>
+    <td>Data Inizio</td>
+    <td>Data Fine</td>
+  </tr>
+  <tr>
+    <td> {{ form_widget(attribute(form, "activityCodePrefix"), { 'attr': {'size': '1'} }) }} </td>
+    <td> {{ form_widget(attribute(form, "activityCodeSuffix"), { 'attr': {'size': '10'} }) }} </td>
+    <td> {{ form_widget(attribute(form, "description"), { 'attr': {'size': '20'} }) }} </td>
+    <td> {{ form_widget(attribute(form, "workorder"), { 'attr': {'size': '1'} }) }} </td>
+    <td> {{ form_widget(attribute(form, "deputy"), { 'attr': {'size': '20'} }) }} </td>
+    <td> {{ form_widget(attribute(form, "validFrom"), { 'attr': {'size': '20'} }) }} </td>
+    <td> {{ form_widget(attribute(form, "validTo"), { 'attr': {'size': '20'} }) }} </td>
+  </tr>
+</table>
+
+<center>
+<a href="{{ path('home') }}" class="button" style="width:40%">CANCEL</a>
+<br>
+<input type="submit" value="SAVE" class='button' style='width: 40%; font-size: 20px;'/>
+</center>
+
+{{ form_end(form) }}
+
+{% endblock %}

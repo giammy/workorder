@@ -1,12 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    <script type="text/javascript" src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/datatables.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('DataTables/datatables.min.css') }}"/>
+
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css"> 
+    {% block stylesheets %}{% endblock %}
+  </head>
+  <body>
+
+    <!-- header -->
+    <div id="main-header">
+        <a href={% block homeURL %}{% endblock %}>
+          <img src="{{ asset(logo_file) }}"
+            alt="Logo" height="96" 
+            style="margin-left:20px;margin-right:20px;margin-top:20px;margin-bottom:20px;float:left">
+        </a>
+        <div style="margin-top: 20px; font-size: 32px; color: #032A5F;  color: #032A5F; font-family: Verdana, Geneva, sans-serif;">{% block headerTitle %}{% endblock %}
+        </div>
+        <div style="margin-top: 5px; font-size: 24px; color: #032A5F; font-family: Verdana, Geneva, sans-serif;">{% block headerSubTitle %}{% endblock %}
+        </div>
+
+    </div>
+
+    <div align="right">
+      {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        {% if userBelongsTo(users_admin, app.user.username) %} <font color="red">ADMIN</font> --- {% endif %}
+        {% if userBelongsTo(users_manager, app.user.username) %} <font >MANAGER</font> --- {% endif %}
+        {% if userBelongsTo(users_it, app.user.username) %} <font >IT</font> --- {% endif %}
+        {% if userBelongsTo(users_cfo, app.user.username) %} <font >CFO</font> --- {% endif %}
+        User: {{ app.user.username }} ---
+        <a href="{{ logout_path('main') }}">Logout</a>
+      {% endif %}
+    </div>
+    <hr>
+
+    {% block javascripts %}{% endblock %}
+
+    {% block body %}{% endblock %}
+
+    <!-- footer -->
+    <hr> 
+    <center>
+      {# <a href="{{ path('home') }}">Home</a> - #}
+      A <a href="https://symfony.com/" target="_blank">Symfony</a> project - 
+      Supported Browsers: Chrome, Firefox, Opera, Safari
+    </center>
+
+  </body>
 </html>
