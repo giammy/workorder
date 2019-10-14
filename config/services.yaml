@@ -10,6 +10,9 @@ parameters:
     users_it: '%env(resolve:USERS_IT)%'
     users_cfo: '%env(resolve:USERS_CFO)%'
 
+    export_workslist_filename: '%env(resolve:EXPORT_WORKSLIST_FILENAME)%'
+    workslist_current_db_format_version: '%env(resolve:WORKSLIST_CURRENT_DB_FORMAT_VERSION)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:

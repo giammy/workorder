@@ -18,13 +18,16 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use App\Services\ExportWorkslistService;
 
 class HomeController extends AbstractController
 {
     private $params;
-
-    public function __construct(ParameterBagInterface $params) {
+    private $exportWorkslistService;
+    public function __construct(ParameterBagInterface $params,
+                                ExportWorkslistService $exportWorkslistService) {
         $this->params = $params;
+        $this->exportWorkslistService = $exportWorkslistService;
     }
 
     /**
@@ -53,27 +56,8 @@ class HomeController extends AbstractController
         if (in_array($username, $allowedUsers)) {
             $appLogger->info("IN: showallAction: username='" . $username . "' allowed");
             $repo = $this->getDoctrine()->getRepository(Workslist::class);
-            $dateNow = new \DateTime();
-            //$listToShow = $repo->findAll();
 	    $listToShow = $repo->findAll(); 
-               // $repo->findBy([], ['activityCodePrefix' => 'ASC', 'lastChangeDate' => 'DESC']);
 
-            if ($item != -1) {
-                //$listToShow = array_values(array_filter($listToShow, function ($x) use ($dateNow) { 
-                //    $valid = $x->getValidTo();
-                //    return ($valid >= $dateNow); 
-                //}));
-
-                //// list is sorted by activityCode
-                //$lastSurname = "";
-                //for ($i=0; $i<count($listToShow); $i++) {
-		//    if ($lastSurname == $listToShow[$i]->getSurname()) {
-		//        unset($listToShow[$i]);
-                //    } else {
-                //        $lastSurname = $listToShow[$i]->getSurname();
-		//    }
-                //}
-            }
             // echo("<pre>");var_dump($listToShow);exit;
 	    return $this->render('showall.html.twig', [
                 'controller_name' => 'ShowallController',
@@ -104,7 +88,10 @@ class HomeController extends AbstractController
         if (!$account) {
             // id does not exist: create new user
             $account = new Workslist();
-            $account->setLastChangeDate(new \DateTime(date('Y-m-d H:i:s')));
+            $account->setCreated(new \DateTime());
+            $account->setIsAnOldCopy(false);
+            $account->setVersion($this->params->get('workslist_current_db_format_version'));
+            $account->setLastChangeDate(new \DateTime());
         }
 
 	$acAll = $repoAC->findAll();
@@ -140,7 +127,6 @@ class HomeController extends AbstractController
             ->add('validTo', DateType::class, array(
                                   'years' => range(date('Y')-1, date('Y')+100),
                                   'data' => new \DateTime('2099-12-31 11:59:59'),
-
                                  ))
             ->getForm();
 
@@ -163,21 +149,11 @@ class HomeController extends AbstractController
 	     $account->setResponsible($x[0]->getResponsible());
 
              $em = $this->getDoctrine()->getManager();
-
-             if ($oldAccount == null) { // new entry
-//                 $account->setVersion($this->params->get('staff_current_db_format_version'));
-                 $em->persist($account);
-             } else {
-                 // change validity dates? duplicate? store new version?
-                 $newAccount = new Staff();
-                 $newAccount = clone $account;
-                 $em->detach($account);
-                 $em->persist($newAccount);
-             }
+             $em->persist($account);
              $em->flush();
 
-//	     // use default filename from environment variable EXPORT_PERSONALE_FILENAME
-//             $this->exportPersonaleService->export(null); 
+	     // use default filename from environment variable EXPORT_WORKSLIST_FILENAME
+             $this->exportWorkslistService->export(null); 
 
              // TODO pagina ringraziamento?
              return $this->redirectToRoute('home');

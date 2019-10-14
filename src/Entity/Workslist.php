@@ -73,6 +73,21 @@ class Workslist
      */
     private $internalNote;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $version;
+
+    /**
+     * @ORM\Column(type="datetimetz")
+     */
+    private $created;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAnOldCopy;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -206,6 +221,42 @@ class Workslist
     public function setInternalNote(?string $internalNote): self
     {
         $this->internalNote = $internalNote;
+
+        return $this;
+    }
+
+    public function getVersion(): ?string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(string $version): self
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): self
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getIsAnOldCopy(): ?bool
+    {
+        return $this->isAnOldCopy;
+    }
+
+    public function setIsAnOldCopy(bool $isAnOldCopy): self
+    {
+        $this->isAnOldCopy = $isAnOldCopy;
 
         return $this;
     }
