@@ -1,5 +1,14 @@
 monolog:
     handlers:
+
+        app:
+            # log all messages (since debug is the lowest level)
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/app.log'
+            channels: [app]
+            formatter: 'monolog.formatter.json'
+
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
