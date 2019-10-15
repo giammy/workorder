@@ -31,15 +31,24 @@ class ImportActivityCode extends Command
         // the "--help" option
         ->setHelp('Import ActivityCode from CSV')
 
+        ->addArgument('mode', InputArgument::REQUIRED, 'import mode: APPEND (do db) or OVERWRITE (reset current table)')
         ->addArgument('filename', InputArgument::REQUIRED, 'CSV filename')
       ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $mode = $input->getArgument('mode');
         $filename = $input->getArgument('filename');
-        $output->writeln('Import CSV from file: ' . $filename);
+        $output->writeln('Import CSV from file: ' . $filename . " mode: " . $mode);
 
-        $dateFormat = 'Y-m-d H:i:sO';
+        if ($mode == "OVERWRITE") {
+            $list = $this->manager->getRepository(ActivityCode::class)->findAll();
+	    foreach ($list as $x) {
+                $this->manager->remove($x);
+            }
+            $this->manager->flush();
+        } 
+
         $rowNo = 1;
         $fieldsNo = 0;
         // $fp is file pointer to filename
@@ -57,11 +66,7 @@ class ImportActivityCode extends Command
                     exit;
                 }
 
-                $output->write("Importing " . $rowNo . ": ");
-                for ($c=0; $c < $num; $c++) {
-                    $output->write('"' . $row[$c] . '",');
-                }
-                $output->writeln("");
+                $output->writeln("Importing " . $rowNo . ': "' . implode('","', $row) . '"');
 
 		// store data in db
                 $acc = new ActivityCode();

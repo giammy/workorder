@@ -29,21 +29,7 @@ class ExportWorkslistService {
         file_put_contents($filename, "CODE,Task/Activity,Contract ref ,RESPONSIBLE&CONTACT_PERSON,start ,end\n");
 
         $repo = $this->manager->getRepository(Workslist::class);
-        $dateNow = new \DateTime();
-        // $listToShow = array_values(array_filter($repo->findBy([], ['surname' => 'ASC', 'lastChangeDate' => 'DESC']), function ($x) use ($dateNow) { 
-        //        $valid = $x->getValidTo();
-        //        return (($x->getName() != "noname") && ($valid >= $dateNow)); 
-        //    }));
         $listToShow = $repo->findAll();
-
-        //$lastSurname = "";
-        //for ($i=0; $i<count($listToShow); $i++) {
-	//    if ($lastSurname == $listToShow[$i]->getSurname()) {
-	//	unset($listToShow[$i]);
-        //    } else {
-        //        $lastSurname = $listToShow[$i]->getSurname();
-	//    }
-        //}
 
         foreach ($listToShow as $x) {
             $ostr = "";

@@ -11,7 +11,13 @@ parameters:
     users_cfo: '%env(resolve:USERS_CFO)%'
 
     export_workslist_filename: '%env(resolve:EXPORT_WORKSLIST_FILENAME)%'
+    export_workorder_filename: '%env(resolve:EXPORT_WORKORDER_FILENAME)%'
+    export_activityCode_filename: '%env(resolve:EXPORT_ACTIVITYCODE_FILENAME)%'
+
     workslist_current_db_format_version: '%env(resolve:WORKSLIST_CURRENT_DB_FORMAT_VERSION)%'
+
+    date_format: '%env(resolve:DATE_FORMAT)%'
+
 
 services:
     # default configuration for services in *this* file
