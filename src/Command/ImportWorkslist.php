@@ -41,12 +41,13 @@ class ImportWorkslist extends Command
     }
 
     protected function getDateFromMonth($month, $defaultMonth, $defaultDay) {
+        $numberOfDays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
         $intMonth = intval($month);
         $date = new \DateTime();
 	if ($intMonth>0 && $intMonth<13) {
-            $date->setDate($date->format("Y"), $intMonth, $defaultDay);
+            $date->setDate($date->format("Y"), $intMonth, ($defaultDay==0?$numberOfDays[$intMonth]:$defaultDay));
         } else {
-            $date->setDate($date->format("Y"), $defaultMonth, $defaultDay);
+            $date->setDate($date->format("Y"), $defaultMonth, ($defaultDay==0?$numberOfDays[$defaultMonth]:$defaultDay));
         }
         return($date);
     }
@@ -106,7 +107,7 @@ class ImportWorkslist extends Command
                         $acc->setDeputy(null);
 		    }
                     $acc->setValidFrom($this->getDateFromMonth($row[4],12,1));
-                    $acc->setValidTo($this->getDateFromMonth($row[5],12,28));
+                    $acc->setValidTo($this->getDateFromMonth($row[5],12,0));
                 } else {
                     $acc->setResponsible($row[3]);
                     $acc->setResponsible($row[4]);
