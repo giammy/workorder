@@ -11,6 +11,7 @@ parameters:
     users_cfo: '%env(resolve:USERS_CFO)%'
 
     export_workslist_filename: '%env(resolve:EXPORT_WORKSLIST_FILENAME)%'
+    export_workslist_filename_bis: '%env(resolve:EXPORT_WORKSLIST_FILENAME_BIS)%'
     export_workorder_filename: '%env(resolve:EXPORT_WORKORDER_FILENAME)%'
     export_activityCode_filename: '%env(resolve:EXPORT_ACTIVITYCODE_FILENAME)%'
 
