@@ -37,7 +37,8 @@ class ExportWorkslistService {
             $ostr = $ostr . $x->getActivityCodePrefix() . "-" . $x->getActivityCodeSuffix() . ",";
             $ostr = $ostr . "\"" . $x->getDescription() . "\",";
             $ostr = $ostr . $x->getWorkorder() . ",";
-            $ostr = $ostr . $x->getResponsible() . "&" . $x->getDeputy() . ",";
+            $dp = $x->getDeputy();
+            $ostr = $ostr . $x->getResponsible() . (($dp!="")?"&".$dp:"") . ",";
             $ostr = $ostr . $x->getValidFrom()->format("n") . ","; // print month
             $ostr = $ostr . $x->getValidTo()->format("n");
 
