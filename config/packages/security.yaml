@@ -12,8 +12,13 @@ security:
                         password: $2y$12$LLZrVYGQgfSE3ldV68Y19egI7Th8JI318Mcae9VnVNAQtxeuKA8fi
                         roles: 'ROLE_ADMIN'
                     api: # api/api
-                        password: $2y$12$9tSW4RKsti0ScgK2kkLBzeyZ.XCN2oXXSq5sL6WpTsmq5544MXhBO
+                        # password: $2y$12$9tSW4RKsti0ScgK2kkLBzeyZ.XCN2oXXSq5sL6WpTsmq5544MXhBO # api/api
+                        password: '%env(resolve:API_PASSWORD_WORKORDER)%'
                         roles: 'ROLE_API'
+                    apip: # api/public
+                        password: '%env(resolve:APIP_PASSWORD_WORKORDER)%'
+                        roles: 'ROLE_APIP'
+
 
         my_ldap:
             ldap:
@@ -58,6 +63,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: [ ROLE_ADMIN, ROLE_USER ] }
-        - { path: ^/api, roles: [ ROLE_ADMIN, ROLE_API ] }
+        - { path: ^/api/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: [ ROLE_ADMIN, ROLE_API, ROLE_USER ] }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: [ ROLE_ADMIN, ROLE_API, ROLE_USER ] }
