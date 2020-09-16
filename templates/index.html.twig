@@ -4,25 +4,36 @@
 
 {% block body %}
 
-  <center><h2>
+  <h2>
 
     {% if userBelongsTo(users_cfo, username) %}
-      <div style="border-style: solid; border-color: grey">
+      <center>
+       <div style="border-style: solid; border-color: grey">
         <font size="2">Riservato per l'ufficio CFO:</font><br>
         <a href="{{ path('editUser') }}" class="button" style="width:42%">New</a>
         <br><p><br>
         <a href="{{ path('showall') }}" class="button" style="width:42%">Show all</a>
         <br><p>
-      </div>
+       </div>
+      </center>
+      <hr>
+      Add/edit/remove the following (<b>WARNING, BE CAREFUL!</b>):
+      <ul>
+	<li><a href="/workorder/admin/?entity=ActivityCode&action=list">Activity Code</a></li>
+        <li><a href="/workorder/admin/?entity=Workorder&action=list">Workorder</a></li>
+      </ul>
+
     {% endif %}
 
 {#
     {% if userBelongsTo(users_admin, username) %}
+    <center>
       <div style="border-style: solid; border-color: red">
         <font size="2">Only for administrators:</font>
         <br>
         <a href="{{ path('showall', { 'item': -1 }) }}" class="button" style="width:42%">Mostra lista INTERNA</a>
       </div>
+    </center>
     {% endif %}
 #}
 
