@@ -94,9 +94,10 @@ class ImportWorkslist extends Command
                 // 0=activityCode, 1=desc, 2=wo, 3=resp, 4=deputy, 5=start, 6=end
 
                 $x = explode('-',$row[0]);
-                $acc->setActivityCodePrefix($x[0]);
-                $acc->setActivityCodeSuffix($x[1]);
-                $acc->setDescription($row[1]);
+		$acc->setActivityCodePrefix($x[0]);
+		array_shift($x);
+		$acc->setActivityCodeSuffix(implode('-', $x));
+		$acc->setDescription($row[1]);
                 $acc->setWorkorder($row[2]);
                 if ($fieldsNo == 6) {
                     $x = explode('&',$row[3]);

@@ -40,8 +40,9 @@ class ExportWorkslistService {
             $dp = $x->getDeputy();
             $ostr = $ostr . $x->getResponsible() . (($dp!="")?"&".$dp:"") . ",";
             $ostr = $ostr . $x->getValidFrom()->format("n") . ","; // print month
-            $ostr = $ostr . $x->getValidTo()->format("n");
-
+	    if ($x->getValidTo()->format("n") != "12") {
+                $ostr = $ostr . $x->getValidTo()->format("n");
+            }
             file_put_contents($filename,    $ostr . "\n", FILE_APPEND);
         }
         unlink($filenameBis);
