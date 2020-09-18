@@ -5,5 +5,6 @@ if ! [ $(id -u) = 48 ]; then
    exit 1
 fi
 
-bin/console export:workslist 
+cd var
+../bin/console export:workslist 
 

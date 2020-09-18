@@ -10,6 +10,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use App\Entity\Workslist;
+use App\Entity\Workorder;
+use App\Entity\ActivityCode;
 
 class ImportWorkslist extends Command
 {
@@ -51,6 +53,20 @@ class ImportWorkslist extends Command
         }
         return($date);
     }
+
+    protected function checkActivityCodePrefix($output, $ac) {
+       if (is_null($this->manager->getRepository(ActivityCode::class)->findOneByLabel($ac))) {
+           $output->writeln('MISSING ActivityCodePrefix ' . $ac);
+       }
+    }
+
+    protected function checkWorkorder($output, $wo) {
+       $x = $this->manager->getRepository(Workorder::class)->findOneByLabel($wo);
+       if (is_null($x)) {
+           $output->writeln('MISSING Workorder ' . $wo);
+       }
+    }
+
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $mode = $input->getArgument('mode');
@@ -95,10 +111,12 @@ class ImportWorkslist extends Command
 
                 $x = explode('-',$row[0]);
 		$acc->setActivityCodePrefix($x[0]);
-		array_shift($x);
+		$this->checkActivityCodePrefix($output, $x[0]);
+                array_shift($x);
 		$acc->setActivityCodeSuffix(implode('-', $x));
 		$acc->setDescription($row[1]);
                 $acc->setWorkorder($row[2]);
+		$this->checkWorkorder($output, $row[2]);
                 if ($fieldsNo == 6) {
                     $x = explode('&',$row[3]);
                     $acc->setResponsible($x[0]);

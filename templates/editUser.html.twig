@@ -6,10 +6,11 @@
 
 {{ form_start(form) }}
 {# {{ form_widget(form) }} #}
+<h2>
 <table style="border-collapse: collapse;">
   <tr>
-    <td>AC</td>
-    <td>AC</td>
+    <td>AC-prefix</td>
+    <td>AC-suffix</td>
     <td>Description</td>
     <td>Workorder</td>
     <td>Deputy</td>
@@ -26,7 +27,8 @@
     <td> {{ form_widget(attribute(form, "validTo"), { 'attr': {'size': '20'} }) }} </td>
   </tr>
 </table>
-
+<h2>
+  
 <center>
 <a href="{{ path('home') }}" class="button" style="width:40%">CANCEL</a>
 <br>

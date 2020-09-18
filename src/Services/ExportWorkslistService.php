@@ -23,6 +23,7 @@ class ExportWorkslistService {
     public function export($filenamePar) {
         $filename = $filenamePar?$filenamePar:$this->params->get('export_workslist_filename');
         $filenameBis = $filenamePar?$filenamePar:$this->params->get('export_workslist_filename_bis');
+        $filenameTer = $filenamePar?$filenamePar:$this->params->get('export_workslist_filename_ter');
         // var_dump($filename);exit;
 
         $this->appLogger->info("IN: ExportWorkslistService.export: filename=" . $filename);
@@ -47,6 +48,8 @@ class ExportWorkslistService {
         }
         unlink($filenameBis);
         copy($filename, $filenameBis);
+        unlink($filenameTer);
+        copy($filename, $filenameTer);
     }
 }
 

@@ -92,6 +92,8 @@ class HomeController extends AbstractController
             $account->setIsAnOldCopy(false);
             $account->setVersion($this->params->get('workslist_current_db_format_version'));
             $account->setLastChangeDate(new \DateTime());
+            $account->setValidFrom(new \DateTime());
+	    $account->setValidTo(new \DateTime('2099-12-31 11:59:59'));
         }
 
 	$acAll = $repoAC->findAll();
@@ -102,12 +104,14 @@ class HomeController extends AbstractController
 	    $l = $x->getLabel();
             $activityCodePrefixChoices[$l] = $l;
 	}
+        asort($activityCodePrefixChoices);
 
         $workorderChoices = [];
 	foreach($woAll as $x) {
 	    $l = $x->getLabel();
             $workorderChoices[$l] = $l;
 	}
+	asort($workorderChoices);
 
         $form = $this->createFormBuilder($account)
             ->add('activityCodePrefix', ChoiceType::class, array(
@@ -123,10 +127,10 @@ class HomeController extends AbstractController
             // responsible is associated to activityCodePrefix
             ->add('deputy', TextType::class, array(
                          'required' => false,))
-            ->add('validFrom', DateType::class, array('data' => new \DateTime()))
+            ->add('validFrom', DateType::class, array('data' => $account->getValidFrom()))
             ->add('validTo', DateType::class, array(
                                   'years' => range(date('Y')-1, date('Y')+100),
-                                  'data' => new \DateTime('2099-12-31 11:59:59'),
+                                  'data' => $account->getValidTo(),
                                  ))
             ->getForm();
 
