@@ -45,12 +45,10 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/showall/{item}", name="showall")
+     * @Route("/showall/{mode}", name="showall")
      */
-    public function showallAction(LoggerInterface $appLogger, $item="0")
+    public function showallAction(LoggerInterface $appLogger, $mode="html")
     {
-	$item=intval($item);
-
         $username = $this->get('security.token_storage')->getToken()->getUser()->getUsername();
 	$allowedUsers = preg_split('/, */', $this->params->get('users_cfo'));
         if (in_array($username, $allowedUsers)) {
@@ -59,11 +57,23 @@ class HomeController extends AbstractController
 	    $listToShow = $repo->findAll(); 
 
             // echo("<pre>");var_dump($listToShow);exit;
-	    return $this->render('showall.html.twig', [
+            if ($mode == "csv") {
+                $resp = $this->render('showall.csv.twig', [
+                    'controller_name' => 'ShowallController',
+                    'list' => $listToShow,
+                    'username' => $this->get('security.token_storage')->getToken()->getUser()->getUsername(),
+     	        ]);
+                $resp->headers->set('Content-Type', 'text/csv');
+                $resp->headers->set('Content-Disposition', 
+                    'attachment; filename="workorder.csv"');
+		return $resp;
+	    } else {
+              return $this->render('showall.html.twig', [
                 'controller_name' => 'ShowallController',
                 'list' => $listToShow,
                 'username' => $this->get('security.token_storage')->getToken()->getUser()->getUsername(),
                 ]);
+            }
         } else {
             $appLogger->info("IN: showallAction: username='" . $username . "' NOT allowed");
             return $this->redirectToRoute('home');

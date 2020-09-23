@@ -1,0 +1,5 @@
+ActivityCode,Workorder,Description,Responsible,Deputy,ValidFrom,ValidTo
+{% for ar in list %}
+{{ ar.activityCodePrefix }}-{{ ar.activityCodeSuffix }},{{ ar.workorder }},"{{ ar.description }}",{{ ar.responsible }},{{ ar.deputy }},{{ ar.validFrom|date('d/m/Y') }},{{ ar.validTo|date('d/m/Y') }}
+{% endfor %}
+
